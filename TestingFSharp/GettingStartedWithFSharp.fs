@@ -1,6 +1,4 @@
-﻿// Next: http://www.tryfsharp.org/Learn/getting-started#data-structures
-
-module TestingFSharpModule
+﻿module TestingFSharpModule
 
 let square x = x * x
 let isOdd x = x % 2 <> 0
@@ -67,13 +65,54 @@ let result = stockData
             |> (fun x -> x.[0])
 
 
+type Book =
+        {
+            Name: string;
+            AuthorName : string;
+            Rating: int option;
+            ISBN: string;
+        }
 
-[<EntryPoint>]
+type VHS =
+        {
+            Name: string;
+            AuthorName : string;
+            Rating: string;
+            ISBN: string;
+        }
+
+let myBook = { Name = "New Book"; AuthorName = "Me"; Book.Rating = Some 10; ISBN = "124-321-34" }
+let otherBook = { myBook with Name = "Another New Book"; Rating = None }
+
+let rating (book:Book) = 
+    match book.Rating with
+    | Some rating -> printfn "I give this book %d star(s) out of 10!" rating
+    | None -> printfn "I didn't review this book"
+
+type MushrommColor = Red | Green | Blue
+type PowerUp = FireFlower | Mushroom of MushrommColor | Star of int
+
+let powerUp = Star 8
+
+// [<EntryPoint>]
 let main argv = 
+    printfn ""
     printfn "%d squared is: %d" 12 (square 12)
     printfn "%d isOdd? Answer: %b" 12 (isOdd 12)
     printfn "%d squared isOdd? Answer: %b" 12 (12 |> square |> isOdd)
+    printfn "%s" (isMe "Test")
+    printfn "Name: %s" myBook.Name
+    printfn "Name: %s" otherBook.Name
 
-    printf "%s" (isMe "Test")
+    rating myBook
+    rating otherBook
+
+    match powerUp with
+    | FireFlower -> printfn "Hot"
+    | Mushroom color -> match color with
+                        | Red -> printfn "Red"
+                        | Green -> printfn "Green"
+                        | Blue -> printfn "Blue"
+    | Star duration -> printfn "Star %d" duration
 
     0 // return an integer exit code
